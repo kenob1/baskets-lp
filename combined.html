@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baskets — Invest with the analysts you follow.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/light/style.css">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0b0a08;
+  --bg-elevated: #141210;
+  --bg-card: #1a1815;
+  --bg-card-hover: #201e1a;
+  --text: #f0ece4;
+  --text-secondary: rgba(240,236,228,0.55);
+  --text-muted: rgba(240,236,228,0.3);
+  --accent: #A0D48B;
+  --accent-light: #b5e0a3;
+  --accent-dim: rgba(160,212,139,0.12);
+  --accent-glow: rgba(160,212,139,0.06);
+  --green: #5cb47a;
+  --green-dim: rgba(92,180,122,0.12);
+  --rule: rgba(240,236,228,0.08);
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent); color: var(--bg); }
+a { color: inherit; text-decoration: none; }
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 72px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(24px, 4vw, 60px);
+  transition: background .4s, backdrop-filter .4s;
+}
+.nav.scrolled {
+  background: rgba(11,10,8,0.88);
+  backdrop-filter: blur(30px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-brand svg { width: 26px; height: 26px; }
+.nav-wordmark {
+  font-family: var(--sans); font-size: 17px; font-weight: 600;
+  letter-spacing: -0.01em; color: var(--text);
+}
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a {
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-secondary); transition: color .3s;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-cta {
+  padding: 10px 24px !important; background: var(--text) !important;
+  color: var(--bg) !important; border-radius: 100px !important;
+  font-weight: 500 !important; transition: all .25s !important;
+}
+.nav-cta:hover { background: var(--accent) !important; transform: translateY(-1px); }
+
+/* ─── HERO (original immersive style) ─── */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: flex-end; overflow: hidden;
+}
+.hero-bg-layer {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+}
+.hero-bg-layer.active { opacity: 1; }
+
+#hero-particles {
+  position: absolute; inset: 0; z-index: 1;
+  pointer-events: none; width: 100%; height: 100%;
+}
+.hero-fade {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 160px;
+  background: linear-gradient(180deg, transparent 0%, var(--bg) 100%);
+  z-index: 1; pointer-events: none;
+}
+.hero-grid {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 60px;
+  align-items: end; max-width: 1440px; width: 100%;
+  margin: 0 auto; padding: 0 clamp(24px, 4vw, 60px) 80px;
+  min-height: 100vh; padding-top: 120px;
+}
+.hero-left { padding-bottom: 20px; }
+.hero-headline {
+  font-family: var(--serif); font-size: clamp(42px, 5vw, 76px);
+  font-weight: 400; line-height: 1.1; letter-spacing: -0.02em;
+  color: var(--text); margin-bottom: 28px;
+  opacity: 0; animation: fadeUp .8s ease forwards .3s;
+}
+.hero-rotate-wrapper {
+  display: inline-block; position: relative;
+  height: 1.1em; overflow: hidden; vertical-align: bottom;
+}
+.hero-rotate-track {
+  display: flex; flex-direction: column;
+  transition: transform .6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero-rotate-word {
+  height: 1.1em; display: flex; align-items: center;
+  color: var(--accent); font-style: italic;
+}
+.hero-sub {
+  font-size: clamp(14px, 1.4vw, 16px); font-weight: 400;
+  line-height: 1.7; color: rgba(240,236,228,0.65);
+  max-width: 460px; margin-bottom: 40px;
+  opacity: 0; animation: fadeUp .8s ease forwards .5s;
+}
+
+/* Hero widget */
+.hero-right {
+  position: relative; display: flex; flex-direction: column;
+  align-items: flex-end; transform: translateY(28px);
+  animation: heroRightIn .85s ease forwards .9s;
+}
+.hero-widget-stack {
+  position: relative; width: 100%; max-width: 420px;
+  min-height: 420px; align-self: flex-end;
+  transform: translate(0, 0); z-index: 1;
+}
+.hero-actions-below {
+  margin-top: 20px; width: 100%; max-width: 420px;
+  display: flex; justify-content: flex-end;
+  opacity: 0; animation: fadeUp .8s ease forwards 1s;
+}
+@keyframes heroRightIn { to { transform: translateY(0); } }
+
+.hero-widget {
+  position: absolute; bottom: 0; right: 0; left: 0;
+  width: 100%; max-width: 420px; display: flex; flex-direction: column;
+  background: transparent; border: none;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.5); border-radius: 20px;
+  overflow: hidden; opacity: 0;
+  transition: opacity .8s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+.hero-widget::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  border-radius: inherit;
+  background: rgba(22, 24, 20, 0.38);
+  backdrop-filter: blur(10px) saturate(1.35);
+  -webkit-backdrop-filter: blur(10px) saturate(1.35);
+  pointer-events: none; transform: translateZ(0);
+}
+.hero-widget::after {
+  content: ''; position: absolute; inset: 0; z-index: 2;
+  border-radius: inherit; pointer-events: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .hero-widget::before { background: rgba(22, 24, 20, 0.88); backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+.hero-widget > * { position: relative; z-index: 1; }
+.hero-widget.active { opacity: 1; pointer-events: auto; }
+
+.hw-top { display: flex; justify-content: center; align-items: center; padding: 12px 14px 4px; }
+.hw-drag {
+  display: flex; justify-content: center; align-items: center;
+  cursor: grab; color: rgba(255,255,255,0.38); line-height: 1; transition: color .2s;
+}
+.hw-drag:hover { color: rgba(255,255,255,0.62); }
+.hw-drag:active { cursor: grabbing; }
+.hw-drag .ph-light { font-size: 22px; }
+
+.hw-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 12px; padding: 10px 20px 16px 28px; margin-top: auto;
+}
+.hw-header-text { min-width: 0; flex: 1; }
+.hw-next {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; margin: 0 -4px -2px 0; padding: 0;
+  color: rgba(240,236,228,0.75); background: transparent;
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 10px;
+  cursor: pointer; transition: color .2s, background .2s, border-color .2s;
+}
+.hw-next:hover { color: #f0ece4; background: rgba(255,255,255,0.08); border-color: rgba(160,212,139,0.45); }
+.hw-next:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+.hw-next .ph-light { font-size: 20px; line-height: 1; }
+
+.hw-name { font-family: var(--serif); font-size: 21px; color: #f0ece4; margin-bottom: 4px; line-height: 1.15; }
+.hw-manager { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: rgba(240,236,228,0.5); }
+
+.hw-card { margin: 12px 16px 10px; background: #f5f2ec; border-radius: 14px; overflow: hidden; }
+.hw-chart { padding: 16px 24px 12px; }
+.hw-chart svg { width: 100%; height: 100px; border: 1px solid rgba(26,23,20,0.06); border-radius: 8px; background: #faf8f4; }
+.hw-divider { height: 1px; margin: 0 24px; background: rgba(26,23,20,0.08); }
+.hw-stats { display: grid; grid-template-columns: 1fr 1fr; padding: 16px 24px 20px; gap: 20px; }
+.hw-stat-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #9c9488; margin-bottom: 4px; }
+.hw-stat-value { font-family: var(--mono); font-size: 20px; font-weight: 500; color: #3d8b5e; }
+.hw-stat-value.dark { color: #1a1714; }
+
+.hw-chart .chart-line { stroke-dasharray: 600; stroke-dashoffset: 600; transition: none; }
+.hw-chart .chart-fill { opacity: 0; transition: none; }
+.hero-widget.active .hw-chart .chart-line { animation: drawLine 1.6s cubic-bezier(0.4,0,0.2,1) 0.3s forwards; }
+.hero-widget.active .hw-chart .chart-fill { animation: fillFade 1s ease 1.2s forwards; }
+@keyframes drawLine { to { stroke-dashoffset: 0; } }
+@keyframes fillFade { to { opacity: 1; } }
+
+.hero-scroll {
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeUp .8s ease forwards 1.2s;
+}
+.hero-scroll span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(180deg, var(--accent), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px; background: transparent; color: var(--text);
+  font-family: var(--mono); font-size: 12px; font-weight: 400;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  border: 1px solid rgba(240,236,228,0.25); border-radius: 100px;
+  cursor: pointer; transition: all .3s;
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Hero responsive */
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; align-items: end; padding-bottom: 100px; }
+  .hero-right { height: auto; align-items: stretch; }
+  .hero-widget-stack { min-height: auto; max-width: 400px; align-self: stretch; }
+  .hero-actions-below { max-width: 400px; justify-content: flex-start; }
+  .hero-widget { position: relative; bottom: auto; right: auto; left: auto; max-width: 400px; }
+}
+
+/* ─── TRUST STRIP ─── */
+.trust-strip {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  max-width: 1440px; margin: 0 auto;
+}
+.trust-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 36px 16px; text-align: center;
+  border-right: 1px solid var(--rule);
+}
+.trust-item:last-child { border-right: none; }
+.trust-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--accent-dim); border: 1px solid rgba(160,212,139,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent); font-size: 20px;
+}
+.trust-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-muted); line-height: 1.45;
+}
+
+/* ─── SECTION FUNDAMENTALS ─── */
+.section-pad {
+  padding: 140px clamp(24px, 4vw, 60px);
+  max-width: 1440px; margin: 0 auto;
+}
+.section-tag {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-tag::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+.section-headline {
+  font-family: var(--serif); font-size: clamp(36px, 4vw, 64px);
+  font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; color: var(--text);
+}
+.section-headline em { font-style: italic; color: var(--accent); }
+
+/* ─── PROBLEM / SOLUTION ─── */
+.ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.ps-card {
+  background: var(--bg-card); border: 1px solid var(--rule);
+  border-radius: 20px; padding: 52px 44px; transition: border-color .3s;
+}
+.ps-card:hover { border-color: rgba(240,236,228,0.14); }
+.ps-tag {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 24px;
+}
+.ps-title {
+  font-family: var(--serif); font-size: clamp(24px, 2.4vw, 34px);
+  font-weight: 400; line-height: 1.18; color: var(--text); margin-bottom: 20px;
+}
+.ps-title strong { color: var(--accent); font-weight: 400; font-style: italic; }
+.ps-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: var(--text-secondary); }
+
+/* ─── HOW IT WORKS ─── */
+.how-section { border-top: 1px solid var(--rule); }
+.how-header { text-align: center; margin-bottom: 72px; }
+.how-header .section-tag { justify-content: center; }
+.how-header .section-tag::before { display: none; }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.how-card {
+  background: var(--bg-card); border: 1px solid var(--rule);
+  border-radius: 20px; padding: 44px 36px; transition: border-color .3s;
+}
+.how-card:hover { border-color: rgba(160,212,139,0.22); }
+.how-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--accent-dim); border: 1px solid rgba(160,212,139,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent); font-size: 24px; margin-bottom: 28px;
+}
+.how-title { font-family: var(--serif); font-size: 22px; color: var(--text); margin-bottom: 14px; line-height: 1.2; }
+.how-body { font-size: 14px; font-weight: 300; line-height: 1.8; color: var(--text-secondary); }
+
+/* ─── FULL-BLEED BREAK ─── */
+.atmo-break {
+  position: relative; height: 55vh; overflow: hidden;
+}
+.atmo-break img {
+  width: 100%; height: 100%; object-fit: cover; opacity: 0.28;
+}
+.atmo-break .atmo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--bg) 0%, transparent 30%, transparent 70%, var(--bg) 100%);
+}
+.atmo-break .atmo-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+}
+.atmo-break .atmo-text div {
+  text-align: center; max-width: 680px; padding: 0 24px;
+  font-family: var(--serif); font-size: clamp(32px, 3.5vw, 56px);
+  color: var(--text); line-height: 1.12; letter-spacing: -0.02em;
+}
+.atmo-break .atmo-text em { font-style: italic; color: var(--accent); }
+
+/* ─── THE THESIS (4 cards) ─── */
+.thesis-section { border-top: 1px solid var(--rule); }
+.thesis-header { text-align: center; margin-bottom: 72px; }
+.thesis-header .section-tag { justify-content: center; }
+.thesis-header .section-tag::before { display: none; }
+.thesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.thesis-card {
+  background: var(--bg-card); border: 1px solid var(--rule);
+  border-radius: 20px; padding: 44px 40px; transition: border-color .3s;
+}
+.thesis-card:hover { border-color: rgba(240,236,228,0.14); }
+.thesis-card-title {
+  font-family: var(--serif); font-size: 24px;
+  color: var(--text); margin-bottom: 16px; line-height: 1.2;
+}
+.thesis-card-title strong { color: var(--accent); font-weight: 400; font-style: italic; }
+.thesis-card-body { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--text-secondary); }
+
+/* ─── LEADERBOARD ─── */
+.lb-section { border-top: 1px solid var(--rule); }
+.lb-header { margin-bottom: 48px; }
+.lb-pills { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+.lb-pill {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+  padding: 8px 18px; border-radius: 100px;
+  border: 1px solid var(--rule); background: transparent;
+  color: var(--text-muted); cursor: pointer; transition: all .25s;
+}
+.lb-pill:hover, .lb-pill.active {
+  background: var(--accent-dim); border-color: rgba(160,212,139,0.3);
+  color: var(--accent);
+}
+.lb-table {
+  width: 100%; border: 1px solid var(--rule); border-radius: 16px;
+  overflow: hidden; border-collapse: separate; border-spacing: 0;
+}
+.lb-table thead th {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-muted); font-weight: 400;
+  padding: 18px 24px; text-align: left;
+  background: var(--bg-card); border-bottom: 1px solid var(--rule);
+}
+.lb-table thead th:last-child { text-align: right; }
+.lb-table tbody tr { border-bottom: 1px solid var(--rule); transition: background .2s; }
+.lb-table tbody tr:last-child { border-bottom: none; }
+.lb-table tbody tr:hover { background: var(--bg-elevated); }
+.lb-table tbody td {
+  padding: 22px 24px; font-size: 14px; color: var(--text-secondary); vertical-align: middle;
+}
+.lb-table tbody td:last-child { text-align: right; }
+.lb-manager { display: flex; align-items: center; gap: 14px; }
+.lb-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--bg); flex-shrink: 0;
+}
+.lb-name { font-weight: 500; color: var(--text); font-size: 14px; }
+.lb-handle { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.lb-perf { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--accent); }
+.lb-sparkline { height: 32px; }
+.lb-sparkline svg { height: 32px; width: 100px; }
+
+/* ─── CTA ─── */
+.cta-section {
+  position: relative; padding: 180px clamp(24px, 4vw, 60px);
+  text-align: center; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%); width: 800px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-headline {
+  font-family: var(--serif); font-size: clamp(44px, 5vw, 80px);
+  font-weight: 400; line-height: 1.06; letter-spacing: -0.02em;
+  color: var(--text); margin-bottom: 24px; position: relative;
+}
+.cta-headline em { font-style: italic; color: var(--accent); }
+.cta-sub {
+  font-size: 18px; font-weight: 300; color: var(--text-secondary);
+  max-width: 520px; margin: 0 auto 56px; line-height: 1.7; position: relative;
+}
+.cta-form {
+  display: flex; gap: 0; max-width: 440px; margin: 0 auto 20px;
+  border-radius: 100px; overflow: hidden;
+  border: 1px solid var(--rule); background: var(--bg-card); position: relative;
+}
+.cta-input {
+  flex: 1; padding: 18px 28px; font-size: 15px;
+  font-family: var(--sans); color: var(--text);
+  background: transparent; border: none; outline: none;
+}
+.cta-input::placeholder { color: var(--text-muted); }
+.cta-btn {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.06em; padding: 18px 32px;
+  background: var(--accent); color: var(--bg);
+  border: none; cursor: pointer; transition: background .2s; white-space: nowrap;
+}
+.cta-btn:hover { background: var(--accent-light); }
+.cta-disclaimer {
+  font-size: 11px; color: var(--text-muted); max-width: 440px;
+  margin: 0 auto; line-height: 1.6; position: relative;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 60px clamp(24px, 4vw, 60px) 40px;
+  max-width: 1440px; margin: 0 auto;
+}
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px; margin-bottom: 60px;
+}
+.footer-brand-text {
+  font-size: 14px; font-weight: 300; line-height: 1.75;
+  color: var(--text-secondary); margin-top: 16px; max-width: 320px;
+}
+.footer-col h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px;
+}
+.footer-col a {
+  display: block; font-size: 14px; font-weight: 300;
+  color: var(--text-secondary); margin-bottom: 12px; transition: color .3s;
+}
+.footer-col a:hover { color: var(--accent); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 24px; padding-top: 32px; border-top: 1px solid var(--rule);
+}
+.footer-copy { font-family: var(--mono); font-size: 11px; color: var(--text-muted); letter-spacing: 0.04em; }
+.footer-legal {
+  font-size: 11px; color: var(--text-muted);
+  max-width: 560px; text-align: right; line-height: 1.6;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .4; transform: scale(1.4); }
+}
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .trust-strip { grid-template-columns: repeat(3, 1fr); }
+  .ps-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .thesis-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .trust-strip { grid-template-columns: 1fr 1fr; }
+  .trust-item { border-right: none !important; border-bottom: 1px solid var(--rule); }
+  .trust-item:last-child { border-bottom: none; }
+  .lb-table thead th, .lb-table tbody td { padding: 14px 16px; }
+  .lb-sparkline { display: none; }
+  .footer-top { grid-template-columns: 1fr; gap: 40px; }
+  .footer-bottom { flex-direction: column; }
+  .footer-legal { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-brand">
+    <svg viewBox="0 0 34 33" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Baskets">
+      <path d="M0.541016 19.462L19.702 31.0141C20.3388 31.398 21.136 31.3969 21.7718 31.0114L30.5417 25.6927C31.8664 24.8894 31.8141 22.9499 30.4481 22.2191L21.0582 17.1958C20.4156 16.852 19.6368 16.885 19.0255 17.2819L0.721343 29.1679" stroke="#f0ece4" stroke-width="2"/>
+      <path d="M0.541016 3.65025L19.6527 15.9407C20.3133 16.3656 21.1614 16.3644 21.8208 15.9378L30.7796 10.1425C32.0385 9.32807 31.9868 7.46925 30.6845 6.72613L21.1107 1.26294C20.442 0.881343 19.6136 0.917493 18.9807 1.35589L0.721343 14.0032" stroke="#f0ece4" stroke-width="2"/>
+      <line x1="9.54102" y1="1.63849" x2="9.54101" y2="30.6385" stroke="#f0ece4" stroke-width="2"/>
+    </svg>
+  </a>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#thesis">The Thesis</a>
+    <a href="#leaderboard">Baskets</a>
+    <a href="#cta" class="nav-cta">Request Access</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-layer active" style="background-image:url(bg-2.png)"></div>
+  <div class="hero-bg-layer" style="background-image:url(bg-1.png)"></div>
+  <div class="hero-bg-layer" style="background-image:url(bg-3.png)"></div>
+  <div class="hero-bg-layer" style="background-image:url(bg-4.png)"></div>
+  <canvas id="hero-particles"></canvas>
+  <div class="hero-fade"></div>
+
+  <div class="hero-grid">
+    <div class="hero-left">
+      <h1 class="hero-headline">
+        Invest with the analysts<br>
+        you follow &mdash;<br>
+        <span class="hero-rotate-wrapper">
+          <span class="hero-rotate-track" id="hero-words">
+            <span class="hero-rotate-word">curated.</span>
+            <span class="hero-rotate-word">unlocked.</span>
+            <span class="hero-rotate-word">fractionalised.</span>
+            <span class="hero-rotate-word">accessible.</span>
+          </span>
+        </span>
+      </h1>
+      <p class="hero-sub">
+        Replicate the top model portfolios from fintwit and Substack.
+        Your $100 gets the same exposure as someone with $500K.
+      </p>
+    </div>
+    <div class="hero-right">
+      <div class="hero-widget-stack">
+      <div class="hero-widget active" data-slide="0">
+        <div class="hw-top"><div class="hw-drag"><i class="ph-light ph-dots-six" aria-hidden="true"></i></div></div>
+        <div class="hw-card">
+          <div class="hw-chart">
+            <svg viewBox="0 0 320 80" preserveAspectRatio="none">
+              <path class="chart-fill" d="M0,60 C20,55 40,50 60,42 C80,34 100,38 120,28 C140,18 160,24 180,14 C200,10 220,16 240,10 C260,6 280,8 320,4 L320,80 L0,80 Z" fill="rgba(61,139,94,0.06)"/>
+              <path class="chart-line" d="M0,60 C20,55 40,50 60,42 C80,34 100,38 120,28 C140,18 160,24 180,14 C200,10 220,16 240,10 C260,6 280,8 320,4" fill="none" stroke="#3d8b5e" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="hw-divider"></div>
+          <div class="hw-stats">
+            <div><div class="hw-stat-label">YTD Return</div><div class="hw-stat-value">+31.2%</div></div>
+            <div><div class="hw-stat-label">AUM</div><div class="hw-stat-value dark">$2.84M</div></div>
+          </div>
+        </div>
+        <div class="hw-header">
+          <div class="hw-header-text">
+            <div class="hw-name">Citrini AI Supply Chain</div>
+            <div class="hw-manager">Citrini Research &middot; 142 Positions</div>
+          </div>
+          <button type="button" class="hw-next" aria-label="Next basket"><i class="ph-light ph-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="hero-widget" data-slide="1">
+        <div class="hw-top"><div class="hw-drag"><i class="ph-light ph-dots-six" aria-hidden="true"></i></div></div>
+        <div class="hw-card">
+          <div class="hw-chart">
+            <svg viewBox="0 0 320 80" preserveAspectRatio="none">
+              <path class="chart-fill" d="M0,62 C30,56 60,50 90,44 C120,38 150,34 180,26 C210,22 240,18 270,12 C290,8 310,6 320,4 L320,80 L0,80 Z" fill="rgba(61,139,94,0.06)"/>
+              <path class="chart-line" d="M0,62 C30,56 60,50 90,44 C120,38 150,34 180,26 C210,22 240,18 270,12 C290,8 310,6 320,4" fill="none" stroke="#3d8b5e" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="hw-divider"></div>
+          <div class="hw-stats">
+            <div><div class="hw-stat-label">YTD Return</div><div class="hw-stat-value">+24.7%</div></div>
+            <div><div class="hw-stat-label">AUM</div><div class="hw-stat-value dark">$1.12M</div></div>
+          </div>
+        </div>
+        <div class="hw-header">
+          <div class="hw-header-text">
+            <div class="hw-name">Defence &amp; Aerospace</div>
+            <div class="hw-manager">SpecialSits Research &middot; 67 Positions</div>
+          </div>
+          <button type="button" class="hw-next" aria-label="Next basket"><i class="ph-light ph-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="hero-widget" data-slide="2">
+        <div class="hw-top"><div class="hw-drag"><i class="ph-light ph-dots-six" aria-hidden="true"></i></div></div>
+        <div class="hw-card">
+          <div class="hw-chart">
+            <svg viewBox="0 0 320 80" preserveAspectRatio="none">
+              <path class="chart-fill" d="M0,65 C40,58 70,52 100,44 C130,36 160,40 190,30 C220,22 250,26 280,16 C300,10 310,8 320,6 L320,80 L0,80 Z" fill="rgba(61,139,94,0.06)"/>
+              <path class="chart-line" d="M0,65 C40,58 70,52 100,44 C130,36 160,40 190,30 C220,22 250,26 280,16 C300,10 310,8 320,6" fill="none" stroke="#3d8b5e" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="hw-divider"></div>
+          <div class="hw-stats">
+            <div><div class="hw-stat-label">YTD Return</div><div class="hw-stat-value">+18.9%</div></div>
+            <div><div class="hw-stat-label">AUM</div><div class="hw-stat-value dark">$680K</div></div>
+          </div>
+        </div>
+        <div class="hw-header">
+          <div class="hw-header-text">
+            <div class="hw-name">Energy Transition</div>
+            <div class="hw-manager">MacroAlf &middot; 89 Positions</div>
+          </div>
+          <button type="button" class="hw-next" aria-label="Next basket"><i class="ph-light ph-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="hero-widget" data-slide="3">
+        <div class="hw-top"><div class="hw-drag"><i class="ph-light ph-dots-six" aria-hidden="true"></i></div></div>
+        <div class="hw-card">
+          <div class="hw-chart">
+            <svg viewBox="0 0 320 80" preserveAspectRatio="none">
+              <path class="chart-fill" d="M0,58 C25,52 55,46 85,38 C115,30 145,34 175,22 C205,14 235,18 265,10 C285,6 305,5 320,3 L320,80 L0,80 Z" fill="rgba(61,139,94,0.06)"/>
+              <path class="chart-line" d="M0,58 C25,52 55,46 85,38 C115,30 145,34 175,22 C205,14 235,18 265,10 C285,6 305,5 320,3" fill="none" stroke="#3d8b5e" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="hw-divider"></div>
+          <div class="hw-stats">
+            <div><div class="hw-stat-label">YTD Return</div><div class="hw-stat-value">+22.4%</div></div>
+            <div><div class="hw-stat-label">AUM</div><div class="hw-stat-value dark">$1.45M</div></div>
+          </div>
+        </div>
+        <div class="hw-header">
+          <div class="hw-header-text">
+            <div class="hw-name">Emerging Markets</div>
+            <div class="hw-manager">Frontier Alpha &middot; 94 Positions</div>
+          </div>
+          <button type="button" class="hw-next" aria-label="Next basket"><i class="ph-light ph-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      </div>
+      <div class="hero-actions-below">
+        <a href="#leaderboard" class="btn-ghost">Explore Baskets</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip reveal">
+  <div class="trust-item">
+    <div class="trust-icon"><i class="ph-light ph-shield-check"></i></div>
+    <div class="trust-label">US-Regulated<br>Brokerage</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><i class="ph-light ph-lock-key"></i></div>
+    <div class="trust-label">Segregated<br>Accounts</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><i class="ph-light ph-buildings"></i></div>
+    <div class="trust-label">Institutional-grade<br>IBKR Custody</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><i class="ph-light ph-seal-check"></i></div>
+    <div class="trust-label">SIPC<br>Protected</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><i class="ph-light ph-arrows-clockwise"></i></div>
+    <div class="trust-label">Auto-rebalanced<br>Portfolios</div>
+  </div>
+</div>
+
+<!-- PROBLEM / SOLUTION -->
+<section class="section-pad reveal">
+  <div class="ps-grid">
+    <div class="ps-card">
+      <div class="ps-tag">The Problem</div>
+      <h3 class="ps-title">You believe in the thesis. But how do you <strong>invest in it?</strong></h3>
+      <p class="ps-body">You read the research. You follow the analysts on fintwit and Substack. You&rsquo;re convinced their portfolio is a winner. But replicating a 100&ndash;200 position model portfolio across US, Japanese, Taiwanese, and European exchanges requires $50K&ndash;$750K in capital. Many underlying assets don't offer fractional shares. And manually rebalancing weekly is a logistical nightmare. You physically can't do it.</p>
+    </div>
+    <div class="ps-card">
+      <div class="ps-tag">The Solution</div>
+      <h3 class="ps-title">Read the research. <strong>baskets handles the rest.</strong></h3>
+      <p class="ps-body">Deposit as little as $100 into a managed basket that mirrors your chosen analyst&rsquo;s exact portfolio weights. When the manager changes their portfolio, Baskets recalculates and pushes updates to IBKR, which auto-rebalances all subscribed accounts. Your capital sits in a segregated account at IBKR, protected by SIPC. You get the same exposure as someone with $500K &mdash; at a fraction of the cost and effort.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section section-pad reveal" id="how">
+  <div class="how-header">
+    <div class="section-tag">How it works</div>
+    <h2 class="section-headline">Three steps to<br><em>expert portfolios.</em></h2>
+  </div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-icon"><i class="ph-light ph-basket"></i></div>
+      <div class="how-title">Choose your basket(s)</div>
+      <p class="how-body">Browse curated baskets spanning AI, energy, defence, and macro themes. Each basket shows the manager, their track record, exact positions, and the thesis behind the portfolio.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-icon"><i class="ph-light ph-wallet"></i></div>
+      <div class="how-title">Deposit and allocate</div>
+      <p class="how-body">Deposit from $100. Your capital is allocated across all positions according to the manager's exact portfolio weights via IBKR's institutional infrastructure.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-icon"><i class="ph-light ph-chart-line-up"></i></div>
+      <div class="how-title">Live rebalancing</div>
+      <p class="how-body">When the analyst updates their portfolio, Baskets auto-rebalances your account automatically. You never need to log in to trade. The system handles everything.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FULL-BLEED BREAK -->
+<div class="atmo-break">
+  <img src="bg-2.png" alt="">
+  <div class="atmo-overlay"></div>
+  <div class="atmo-text"><div>Your $100 isn't a fund unit.<br><em>It's actually yours.</em></div></div>
+</div>
+
+<!-- THE THESIS -->
+<section class="thesis-section section-pad reveal" id="thesis">
+  <div class="thesis-header">
+    <div class="section-tag">The Thesis</div>
+    <h2 class="section-headline">Read the research.<br>Then invest in the <em>thesis.</em></h2>
+  </div>
+  <div class="thesis-grid">
+    <div class="thesis-card">
+      <h4 class="thesis-card-title">Thesis-driven <strong>investing</strong></h4>
+      <p class="thesis-card-body">Each basket is driven by a deep research thesis &mdash; published openly on Substack and Twitter. You can read the manager's reasoning, understand their conviction, and decide if their portfolio aligns with your worldview before putting in a single dollar.</p>
+    </div>
+    <div class="thesis-card">
+      <h4 class="thesis-card-title">Full <strong>transparency</strong></h4>
+      <p class="thesis-card-body">See exactly what's in every basket: each position, its weight, the exchanges it trades on, and a full audit trail of every rebalance. No black boxes, no hidden fees, no "trust us" opacity. You see exactly where your money sits.</p>
+    </div>
+    <div class="thesis-card">
+      <h4 class="thesis-card-title"><strong>Your $100</strong> holds&hellip;</h4>
+      <p class="thesis-card-body">A pro-rata slice of every position in the basket. Your $100 is split across 142 positions &mdash; NVDA, TSM, ASML, and 139 others &mdash; in the exact proportions that a $500K+ portfolio would hold. The tracking error is sub-basis-point.</p>
+    </div>
+    <div class="thesis-card">
+      <h4 class="thesis-card-title">Then <strong>expands.</strong> Your position.</h4>
+      <p class="thesis-card-body">As more capital enters the basket, coverage improves. Positions that were too expensive to fractionalize become accessible. Every new dollar makes the entire system more precise for everyone. Capital efficiency is the core flywheel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOP-PERFORMING BASKETS -->
+<section class="lb-section section-pad reveal" id="leaderboard">
+  <div class="lb-header">
+    <div class="section-tag">Leaderboard</div>
+    <h2 class="section-headline">Top-performing <em>baskets</em></h2>
+  </div>
+  <div class="lb-pills">
+    <button class="lb-pill active">All</button>
+    <button class="lb-pill">AI</button>
+    <button class="lb-pill">Defence</button>
+    <button class="lb-pill">Energy</button>
+    <button class="lb-pill">Macro</button>
+    <button class="lb-pill">Emerging Markets</button>
+  </div>
+  <table class="lb-table">
+    <thead>
+      <tr>
+        <th>Manager</th>
+        <th>Basket</th>
+        <th>Positions</th>
+        <th class="lb-sparkline">30d</th>
+        <th>Return</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="lb-manager">
+            <div class="lb-avatar" style="background:#5cb47a;">CR</div>
+            <div><div class="lb-name">Citrini Research</div><div class="lb-handle">@Citrini</div></div>
+          </div>
+        </td>
+        <td>AI Supply Chain</td>
+        <td>142</td>
+        <td class="lb-sparkline">
+          <svg viewBox="0 0 100 32" preserveAspectRatio="none"><path d="M0,26 C8,24 16,22 24,18 C32,14 40,16 48,12 C56,8 64,10 72,6 C80,4 88,5 100,2" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+        </td>
+        <td><span class="lb-perf">+67.2%</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="lb-manager">
+            <div class="lb-avatar" style="background:#4a7a9a;">SS</div>
+            <div><div class="lb-name">SpecialSits Research</div><div class="lb-handle">@SpecialSitsRes</div></div>
+          </div>
+        </td>
+        <td>Defence &amp; Aerospace</td>
+        <td>67</td>
+        <td class="lb-sparkline">
+          <svg viewBox="0 0 100 32" preserveAspectRatio="none"><path d="M0,28 C12,24 24,20 36,16 C48,12 60,14 72,8 C84,4 92,6 100,3" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+        </td>
+        <td><span class="lb-perf">+38.6%</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="lb-manager">
+            <div class="lb-avatar" style="background:#6b9a5a;">MA</div>
+            <div><div class="lb-name">MacroAlf</div><div class="lb-handle">@MacroAlf</div></div>
+          </div>
+        </td>
+        <td>Energy Transition</td>
+        <td>89</td>
+        <td class="lb-sparkline">
+          <svg viewBox="0 0 100 32" preserveAspectRatio="none"><path d="M0,24 C10,22 20,18 30,20 C40,16 50,14 60,10 C70,8 80,12 90,6 C95,4 98,5 100,4" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+        </td>
+        <td><span class="lb-perf">+28.4%</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- FULL-BLEED BREAK 2 -->
+<div class="atmo-break" style="height:45vh;">
+  <img src="bg-3.png" alt="">
+  <div class="atmo-overlay"></div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section reveal" id="cta">
+  <h2 class="cta-headline">Start investing with<br>the <em>best.</em></h2>
+  <p class="cta-sub">Request early access to Baskets and get first-in-line priority when we launch. Limited spots.</p>
+  <div class="cta-form">
+    <input class="cta-input" type="email" placeholder="you@email.com">
+    <button class="cta-btn">Request Access</button>
+  </div>
+  <p class="cta-disclaimer">By joining you agree to our Terms of Service. Securities offered through regulated US brokerage partners. Not investment advice. Past performance is not indicative of future results.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-brand" style="margin-bottom:0;">
+        <svg viewBox="0 0 34 33" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28" aria-label="Baskets">
+          <path d="M0.541016 19.462L19.702 31.0141C20.3388 31.398 21.136 31.3969 21.7718 31.0114L30.5417 25.6927C31.8664 24.8894 31.8141 22.9499 30.4481 22.2191L21.0582 17.1958C20.4156 16.852 19.6368 16.885 19.0255 17.2819L0.721343 29.1679" stroke="#f0ece4" stroke-width="2"/>
+          <path d="M0.541016 3.65025L19.6527 15.9407C20.3133 16.3656 21.1614 16.3644 21.8208 15.9378L30.7796 10.1425C32.0385 9.32807 31.9868 7.46925 30.6845 6.72613L21.1107 1.26294C20.442 0.881343 19.6136 0.917493 18.9807 1.35589L0.721343 14.0032" stroke="#f0ece4" stroke-width="2"/>
+          <line x1="9.54102" y1="1.63849" x2="9.54101" y2="30.6385" stroke="#f0ece4" stroke-width="2"/>
+        </svg>
+      </div>
+      <p class="footer-brand-text">Expert portfolios, accessible to everyone &mdash; from $100. Invest with the analysts you already follow.</p>
+    </div>
+    <div class="footer-col"><h5>Product</h5><a href="#">Browse Baskets</a><a href="#">How It Works</a><a href="#">Performance</a><a href="#">Dashboard</a></div>
+    <div class="footer-col"><h5>Managers</h5><a href="#">Become a Manager</a><a href="#">Leaderboard</a><a href="#">Criteria</a></div>
+    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Security</a><a href="#">Blog</a><a href="#">Contact</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2025 Baskets Financial, Inc. All rights reserved.</span>
+    <span class="footer-legal">Baskets is not a registered investment adviser. Content is for informational purposes only. Past performance is not indicative of future results. Investing involves risk including possible loss of principal. Securities offered through regulated US brokerage partners. SIPC Member.</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Leaderboard filter pills
+document.querySelectorAll('.lb-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.lb-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+
+// ─── HERO PIXELATION + SLIDESHOW ───
+(function() {
+  const canvas = document.getElementById('hero-particles');
+  const ctx = canvas.getContext('2d');
+  const bgLayers = document.querySelectorAll('.hero-bg-layer');
+  const widgets = document.querySelectorAll('.hero-widget');
+  const wordTrack = document.getElementById('hero-words');
+  const totalSlides = bgLayers.length;
+  const totalWords = 4;
+  let slideIndex = 0;
+  let wordIndex = 0;
+  let W, H;
+  let mouse = { x: -9999, y: -9999, trail: [] };
+
+  const CELL = 8;
+  let cols, rows, cells;
+  const ACCENT = [160, 212, 139];
+  const ACCENT_CHANCE = 0.07;
+
+  const samplerCanvas = document.createElement('canvas');
+  const samplerCtx = samplerCanvas.getContext('2d', { willReadFrequently: true });
+  const bgImages = [];
+  const bgSrcs = ['bg-2.png', 'bg-1.png', 'bg-3.png', 'bg-4.png'];
+  let imagesReady = 0;
+
+  bgSrcs.forEach((src, idx) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => { imagesReady++; };
+    bgImages[idx] = img;
+  });
+
+  function sampleImageColors(imgIndex) {
+    const img = bgImages[imgIndex];
+    if (!img || !img.complete) return null;
+    samplerCanvas.width = cols;
+    samplerCanvas.height = rows;
+    samplerCtx.drawImage(img, 0, 0, cols, rows);
+    try { return samplerCtx.getImageData(0, 0, cols, rows).data; }
+    catch (e) { return null; }
+  }
+
+  function resize() {
+    const hero = document.getElementById('hero');
+    W = canvas.width = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+    buildGrid();
+  }
+
+  function buildGrid() {
+    cols = Math.ceil(W / CELL);
+    rows = Math.ceil(H / CELL);
+    cells = new Array(cols * rows);
+    for (let i = 0; i < cells.length; i++) {
+      const c = i % cols;
+      const r = Math.floor(i / cols);
+      cells[i] = { x: c * CELL, y: r * CELL, opacity: 0, ox: 0, oy: 0, color: [20, 22, 18], _startTime: 0 };
+    }
+  }
+
+  function triggerDissolve() {
+    const pixels = sampleImageColors(slideIndex);
+    const cx = W * (0.3 + Math.random() * 0.4);
+    const cy = H * (0.3 + Math.random() * 0.4);
+    const maxDist = Math.sqrt(W * W + H * H) * 0.65;
+    const now = performance.now();
+
+    for (let i = 0; i < cells.length; i++) {
+      const cell = cells[i];
+      const dx = (cell.x + CELL / 2) - cx;
+      const dy = (cell.y + CELL / 2) - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const norm = Math.min(dist / maxDist, 1);
+
+      if (pixels && Math.random() > ACCENT_CHANCE) {
+        const pi = i * 4;
+        cell.color = [pixels[pi], pixels[pi + 1], pixels[pi + 2]];
+      } else if (Math.random() < ACCENT_CHANCE) {
+        cell.color = ACCENT;
+      } else {
+        const v = Math.floor(Math.random() * 40 + 15);
+        cell.color = [v, v + 2, v - 2];
+      }
+
+      const angle = Math.atan2(dy, dx);
+      const push = (1 - norm) * 4 + Math.random() * 2;
+      cell._pushX = Math.cos(angle) * push;
+      cell._pushY = Math.sin(angle) * push;
+      cell._peakOpacity = Math.random() * 0.25 + 0.1;
+      cell._startTime = now + norm * 500;
+      cell._duration = 800 + Math.random() * 400;
+    }
+  }
+
+  function updateCells(now) {
+    for (let i = 0; i < cells.length; i++) {
+      const cell = cells[i];
+      if (cell._startTime && now >= cell._startTime) {
+        const elapsed = now - cell._startTime;
+        const progress = Math.min(elapsed / cell._duration, 1);
+        if (progress < 0.3) {
+          const t = progress / 0.3;
+          cell.opacity = cell._peakOpacity * t;
+          cell.ox = cell._pushX * t;
+          cell.oy = cell._pushY * t;
+        } else {
+          const t = (progress - 0.3) / 0.7;
+          const ease = t * t;
+          cell.opacity = cell._peakOpacity * (1 - ease);
+          cell.ox = cell._pushX * (1 - ease * 0.5);
+          cell.oy = cell._pushY * (1 - ease * 0.5);
+        }
+        if (progress >= 1) { cell.opacity = 0; cell.ox = 0; cell.oy = 0; cell._startTime = 0; }
+      }
+
+      const mcx = cell.x + CELL / 2;
+      const mcy = cell.y + CELL / 2;
+      const mdx = mcx - mouse.x;
+      const mdy = mcy - mouse.y;
+      const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+      const radius = 100;
+      if (mdist < radius) {
+        const force = (radius - mdist) / radius;
+        const curve = force * force * force;
+        cell.opacity = Math.max(cell.opacity, curve * 0.18);
+        cell.ox += (mdx / mdist) * curve * 0.8;
+        cell.oy += (mdy / mdist) * curve * 0.8;
+      }
+      for (let t = 0; t < mouse.trail.length; t++) {
+        const tp = mouse.trail[t];
+        const tdx = mcx - tp.x;
+        const tdy = mcy - tp.y;
+        const tdist = Math.sqrt(tdx * tdx + tdy * tdy);
+        if (tdist < 60) {
+          const tf = ((60 - tdist) / 60) * tp.strength;
+          cell.opacity = Math.max(cell.opacity, tf * 0.1);
+        }
+      }
+      cell.ox *= 0.93;
+      cell.oy *= 0.93;
+      if (!cell._startTime && mdist >= radius) { cell.opacity *= 0.88; }
+    }
+  }
+
+  function drawCells() {
+    for (let i = 0; i < cells.length; i++) {
+      const cell = cells[i];
+      if (cell.opacity < 0.004) continue;
+      const c = cell.color;
+      ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${cell.opacity})`;
+      ctx.fillRect(cell.x + cell.ox, cell.y + cell.oy, CELL - 1, CELL - 1);
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    const now = performance.now();
+    if (mouse.x > -999) { mouse.trail.push({ x: mouse.x, y: mouse.y, strength: 1 }); }
+    for (let i = mouse.trail.length - 1; i >= 0; i--) {
+      mouse.trail[i].strength -= 0.025;
+      if (mouse.trail[i].strength <= 0) mouse.trail.splice(i, 1);
+    }
+    if (mouse.trail.length > 25) mouse.trail.shift();
+    updateCells(now);
+    drawCells();
+    requestAnimationFrame(animate);
+  }
+
+  function restartChartAnim(widget) {
+    widget.querySelectorAll('.chart-line, .chart-fill').forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = '';
+    });
+  }
+
+  function nextSlide() {
+    bgLayers[slideIndex].classList.remove('active');
+    widgets[slideIndex].classList.remove('active');
+    slideIndex = (slideIndex + 1) % totalSlides;
+    bgLayers[slideIndex].classList.add('active');
+    widgets[slideIndex].classList.add('active');
+    restartChartAnim(widgets[slideIndex]);
+  }
+
+  let slideTimerId = setInterval(nextSlide, 10000);
+  function bumpSlideTimer() {
+    clearInterval(slideTimerId);
+    slideTimerId = setInterval(nextSlide, 10000);
+  }
+
+  function nextWord() {
+    wordIndex = (wordIndex + 1) % totalWords;
+    wordTrack.style.transform = `translateY(-${wordIndex * 25}%)`;
+  }
+
+  const heroEl = document.getElementById('hero');
+  heroEl.addEventListener('click', e => {
+    if (!e.target.closest('.hw-next')) return;
+    e.preventDefault();
+    nextSlide();
+    bumpSlideTimer();
+  });
+  heroEl.addEventListener('mousemove', e => {
+    const rect = heroEl.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  heroEl.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+  window.addEventListener('resize', resize);
+  resize();
+  animate();
+  setInterval(nextWord, 2500);
+})();
+
+// ─── DRAGGABLE WIDGET STACK ───
+(function() {
+  const stack = document.querySelector('.hero-widget-stack');
+  if (!stack) return;
+  let dragging = false;
+  let startX, startY, origX, origY;
+
+  stack.querySelectorAll('.hw-drag').forEach(handle => {
+    handle.addEventListener('mousedown', onDown);
+    handle.addEventListener('touchstart', onDown, { passive: false });
+  });
+
+  function parseStackTranslate() {
+    const t = stack.style.transform;
+    const m = t.match(/translate\(\s*([-\d.]+)px\s*,\s*([-\d.]+)px\s*\)/);
+    if (m) return { x: parseFloat(m[1]), y: parseFloat(m[2]) };
+    const style = getComputedStyle(stack);
+    const matrix = new DOMMatrix(style.transform);
+    return { x: matrix.m41, y: matrix.m42 };
+  }
+
+  function onDown(e) {
+    if (!e.target.closest('.hw-drag')) return;
+    e.preventDefault();
+    dragging = true;
+    const pt = e.touches ? e.touches[0] : e;
+    startX = pt.clientX; startY = pt.clientY;
+    const o = parseStackTranslate();
+    origX = o.x; origY = o.y;
+    stack.style.transition = 'none';
+    stack.style.zIndex = '5';
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onUp);
+  }
+
+  function onMove(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    const pt = e.touches ? e.touches[0] : e;
+    const dx = pt.clientX - startX;
+    const dy = pt.clientY - startY;
+    stack.style.transform = `translate(${origX + dx}px, ${origY + dy}px)`;
+  }
+
+  function onUp() {
+    if (!dragging) return;
+    dragging = false;
+    stack.style.transition = '';
+    stack.style.zIndex = '';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onUp);
+  }
+})();
+</script>
+
+</body>
+</html>

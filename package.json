@@ -1,0 +1,9 @@
+{
+  "name": "baskets-lp",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Baskets landing page",
+  "dependencies": {
+    "@phosphor-icons/web": "2.1.1"
+  }
+}

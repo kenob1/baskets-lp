@@ -1,0 +1,73 @@
+<svg width="680" height="720" viewBox="0 0 680 720" xmlns="http://www.w3.org/2000/svg" style="font-family: Inter, Helvetica, Arial, sans-serif;">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+<!-- Step labels -->
+<text x="30" y="68" text-anchor="middle" font-size="12" fill="#888780">Step 1</text>
+<text x="30" y="188" text-anchor="middle" font-size="12" fill="#888780">Step 2</text>
+<text x="30" y="318" text-anchor="middle" font-size="12" fill="#888780">Step 3</text>
+<text x="30" y="448" text-anchor="middle" font-size="12" fill="#888780">Step 4</text>
+<text x="30" y="578" text-anchor="middle" font-size="12" fill="#888780">Step 5</text>
+
+<!-- Step 1: Manager publishes -->
+<g>
+  <rect x="80" y="40" width="560" height="56" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+  <text x="360" y="60" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#712B13">Citrini publishes portfolio update on Substack</text>
+  <text x="360" y="78" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#993C1D">Adds 255A.JP at 1.8%, increases CRDO to 3.1%, removes NVDA</text>
+</g>
+
+<!-- Arrow 1→2 -->
+<line x1="360" y1="96" x2="360" y2="148" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+<text x="368" y="126" font-size="12" fill="#5F5E5A">Baskets detects change</text>
+
+<!-- Step 2: Baskets calculates -->
+<g>
+  <rect x="80" y="150" width="560" height="76" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="360" y="174" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#3C3489">Baskets strategy engine recalculates weights</text>
+  <text x="360" y="194" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534AB7">Parses update → diffs against current model → generates new target %</text>
+  <text x="360" y="210" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534AB7">Output: 200 tickers with updated percentage allocations summing to 100%</text>
+</g>
+
+<!-- Arrow 2→3 -->
+<line x1="360" y1="226" x2="360" y2="278" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+<text x="368" y="256" font-size="12" fill="#5F5E5A">Pushes via TWS API</text>
+
+<!-- Step 3: IBKR model update -->
+<g>
+  <rect x="80" y="280" width="560" height="76" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="360" y="304" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#444441">IBKR model portfolio receives new target weights</text>
+  <text x="360" y="324" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5F5E5A">Static model "Citrindex Mirror" updated: 255A.JP added at 1.8%</text>
+  <text x="360" y="340" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5F5E5A">CRDO target changed 2.5% → 3.1%, NVDA removed (set to 0%)</text>
+</g>
+
+<!-- Arrow 3→4 -->
+<line x1="360" y1="356" x2="360" y2="408" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+<text x="368" y="386" font-size="12" fill="#5F5E5A">Auto-generates rebalance orders</text>
+
+<!-- Step 4: IBKR rebalances -->
+<g>
+  <rect x="80" y="410" width="560" height="76" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="360" y="434" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#0C447C">IBKR rebalances all subscribed client accounts</text>
+  <text x="360" y="454" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">Account A ($5K): buy 2 shares 255A.JP, sell 1 NVDA, buy 0.3 CRDO</text>
+  <text x="360" y="470" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">Account B ($12K): buy 5 shares 255A.JP, sell 3 NVDA, buy 0.8 CRDO</text>
+</g>
+
+<!-- Arrow 4→5 -->
+<line x1="360" y1="486" x2="360" y2="538" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+<text x="368" y="516" font-size="12" fill="#5F5E5A">Orders routed to exchanges</text>
+
+<!-- Step 5: Execution -->
+<g>
+  <rect x="80" y="540" width="560" height="76" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="360" y="564" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">Trades execute on global exchanges</text>
+  <text x="360" y="584" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#854F0B">255A.JP fills on TSE, CRDO fills on NASDAQ, NVDA sells on NASDAQ</text>
+  <text x="360" y="600" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#854F0B">Users see updated holdings in real time</text>
+</g>
+
+<!-- Dashed ownership boundaries -->
+<rect x="68" y="140" width="584" height="100" rx="12" fill="none" stroke="#B4B2A9" stroke-width="1" stroke-dasharray="6 4"/>
+<text x="92" y="240" font-size="12" fill="#888780">Baskets builds this</text>
+
+<rect x="68" y="270" width="584" height="360" rx="12" fill="none" stroke="#B4B2A9" stroke-width="1" stroke-dasharray="6 4"/>
+<text x="92" y="640" font-size="12" fill="#888780">RIA partner + IBKR handle this</text>
+
+</svg>
