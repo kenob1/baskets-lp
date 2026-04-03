@@ -222,7 +222,7 @@ a { color: inherit; text-decoration: none; }
   height: 1.06em; display: flex; align-items: center; justify-content: center;
   font-style: italic;
 }
-.hero-rotate-word:nth-child(3n+1) { color: #9A93E8; }
+.hero-rotate-word:nth-child(3n+1) { color: var(--purple); }
 .hero-rotate-word:nth-child(3n+2) { color: #F0B28C; }
 .hero-rotate-word:nth-child(3n+3) { color: #AED291; }
 
@@ -534,8 +534,8 @@ a { color: inherit; text-decoration: none; }
   z-index: 0; pointer-events: none;
 }
 .thesis-dark-title {
-  font-family: var(--serif); font-size: 26px; font-weight: 400;
-  color: var(--steel); margin-bottom: 14px;
+  font-family: var(--serif); font-size: clamp(32px, 4vw, 56px); font-weight: 400;
+  color: var(--steel); margin-bottom: 14px; line-height: 1.1; letter-spacing: -0.02em;
   position: relative; z-index: 1;
 }
 .thesis-dark-title em { font-style: italic; }
@@ -547,49 +547,120 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ═══════════════════════════════════════════
-   OWNERSHIP — split layout
+   OWNERSHIP — dark split layout
    ═══════════════════════════════════════════ */
+.s-card-own {
+  background: var(--dark-card);
+  position: relative; overflow: hidden;
+  --green: #A5E5B8;
+  --green-soft: #c8f0d4;
+  --green-dim: rgba(165,229,184,0.10);
+  --own-text: #EEE8DF;
+  --own-text-secondary: rgba(238,232,223,0.75);
+  --own-text-muted: rgba(238,232,223,0.45);
+  color: #EEE8DF;
+}
+.s-card-own::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 40% at var(--gx, 50%) var(--gy, 50%), rgba(29,27,24,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(29,27,24,0.65) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 90%, rgba(29,27,24,0.4) 0%, transparent 60%);
+  transition: background .15s ease-out;
+}
+.s-card-own::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat; background-size: 180px 180px;
+}
+.s-card-own > * { position: relative; z-index: 2; }
+
+.own-banner {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: rgba(38,33,30,0.20); border-radius: 100px;
+  padding: 12px 28px; margin: 0 auto 48px;
+  max-width: fit-content;
+}
+.own-banner i { font-size: 18px; color: var(--own-text); flex-shrink: 0; }
+.own-banner span { font-size: 13px; font-weight: 400; color: var(--own-text); }
+.own-banner strong { font-weight: 600; color: var(--own-text); }
+
 .own-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 56px;
-  align-items: center;
+  align-items: end;
 }
-.own-card {
-  background: var(--dark-card); border-radius: 22px;
-  padding: 40px; color: var(--text-light);
+.own-left-body {
+  font-size: 15px; font-weight: 400; line-height: 1.75;
+  color: var(--own-text-secondary); margin-top: 16px; margin-bottom: 32px;
+  max-width: 460px;
 }
-.own-card-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 24px; padding-bottom: 16px;
-  border-bottom: 1px solid var(--rule-dark);
+.own-features {
+  background: #EEE8DF; border-radius: 20px;
+  padding: 36px 32px;
+  display: flex; flex-direction: column; gap: 28px;
 }
-.own-card-title { font-family: var(--serif); font-size: 16px; color: var(--text-light); }
-.own-card-badge {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
-  background: var(--green-dim); color: var(--green); padding: 4px 12px; border-radius: 100px;
-}
-.own-amount { text-align: center; margin-bottom: 24px; }
-.own-amount-val { font-family: var(--serif); font-size: 48px; color: var(--text-light); display: block; }
-.own-amount-sub { font-size: 12px; color: var(--text-light-muted); margin-top: 6px; }
-.hold-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.hold-ticker {
-  font-family: var(--mono); font-size: 11px; font-weight: 500;
-  color: var(--green-soft); width: 48px; flex-shrink: 0;
-}
-.hold-bar { flex: 1; height: 4px; background: rgba(240,236,228,0.06); border-radius: 2px; overflow: hidden; }
-.hold-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green-soft), var(--green)); border-radius: 2px; }
-.hold-amt { font-family: var(--mono); font-size: 11px; color: var(--text-light-secondary); width: 48px; text-align: right; }
-.hold-more { text-align: center; font-size: 12px; color: var(--text-light-muted); font-style: italic; margin-top: 12px; }
-
-.own-points { list-style: none; display: flex; flex-direction: column; gap: 28px; }
-.own-point { display: flex; gap: 18px; align-items: flex-start; }
-.own-point-icon {
+.own-feature { display: flex; gap: 18px; align-items: flex-start; }
+.own-feature-icon {
   width: 44px; height: 44px; border-radius: 12px;
   background: var(--green-dim); border: 1px solid rgba(92,180,122,0.15);
   display: flex; align-items: center; justify-content: center;
   color: var(--green); font-size: 20px; flex-shrink: 0;
 }
-.own-point-title { font-weight: 600; font-size: 15px; color: var(--text-dark); margin-bottom: 4px; }
-.own-point-body { font-size: 14px; font-weight: 400; line-height: 1.7; color: var(--text-dark-secondary); }
+.own-feature-title { font-weight: 600; font-size: 15px; color: var(--text-dark); margin-bottom: 4px; }
+.own-feature-body { font-size: 14px; font-weight: 400; line-height: 1.7; color: var(--text-dark-secondary); }
+
+.own-card {
+  background: rgba(35, 33, 31, 1); border: 1px solid rgba(238,232,223,0.08);
+  border-radius: 22px; padding: 36px; color: var(--own-text);
+}
+.own-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px; padding-bottom: 16px;
+  border-bottom: 1px solid rgba(238,232,223,0.08);
+}
+.own-card-title { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--own-text); }
+.own-card-badge {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--green); white-space: nowrap;
+  background: rgba(165,229,184,0.15); padding: 5px 12px; border-radius: 100px;
+}
+.own-amount { text-align: center; margin-bottom: 24px; }
+.own-amount-val { font-family: var(--serif); font-size: 48px; color: var(--own-text); display: block; }
+.own-amount-sub { font-size: 12px; color: var(--own-text-muted); margin-top: 6px; }
+.hold-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.hold-ticker {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--green); width: 48px; flex-shrink: 0;
+}
+.hold-bar { flex: 1; height: 4px; background: rgba(238,232,223,0.06); border-radius: 2px; overflow: hidden; }
+.hold-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green-soft), var(--green)); border-radius: 2px; }
+.hold-amt { font-family: var(--mono); font-size: 11px; color: var(--own-text-secondary); width: 48px; text-align: right; }
+.hold-more { text-align: center; font-size: 12px; color: var(--own-text-muted); font-style: italic; margin-top: 12px; }
+
+.own-coverage {
+  margin-top: 24px; padding-top: 24px;
+  border-top: 1px solid rgba(238,232,223,0.08);
+}
+.own-coverage-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 14px;
+}
+.own-coverage-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--own-text-muted);
+}
+.own-coverage-pct {
+  font-family: var(--mono); font-size: 11px; color: var(--own-text-secondary);
+}
+.own-coverage-grid {
+  display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px;
+}
+.own-cov-cell {
+  aspect-ratio: 1; border-radius: 2px;
+  background: var(--green-dim); border: 1px solid rgba(92,180,122,0.2);
+}
+.own-cov-cell.filled { background: var(--green); border-color: var(--green); }
+.own-cov-cell.partial { background: var(--green-soft); border-color: var(--green-soft); }
 
 /* ═══════════════════════════════════════════
    SECURITY — split layout
@@ -664,6 +735,67 @@ a { color: inherit; text-decoration: none; }
 .cmp-check { color: var(--green); }
 .cmp-cross { color: #b84a3a; }
 .cmp-part  { color: var(--green-soft); }
+
+/* ═══════════════════════════════════════════
+   ATMOSPHERIC BREAK
+   ═══════════════════════════════════════════ */
+.atmo-break {
+  position: relative; height: clamp(180px, 20vw, 280px);
+  overflow: hidden; border-radius: var(--card-radius);
+  margin-bottom: var(--card-gap);
+}
+.atmo-break img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; filter: brightness(0.5);
+}
+.atmo-break-fade {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, transparent 30%, var(--cream) 100%);
+}
+
+/* ═══════════════════════════════════════════
+   CAPITAL EFFICIENCY
+   ═══════════════════════════════════════════ */
+.capeff-grid {
+  display: grid; grid-template-columns: 1fr 1.1fr;
+  gap: clamp(48px, 6vw, 100px); align-items: center;
+}
+.capeff-tag {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--text-light-muted);
+  margin-bottom: 20px;
+}
+.capeff-tag::before {
+  content: ''; width: 28px; height: 1px;
+  background: var(--text-light-muted);
+}
+.capeff-body {
+  font-size: 15px; font-weight: 400; line-height: 1.75;
+  color: var(--text-light-secondary); margin-top: 20px; max-width: 460px;
+}
+.capeff-fine {
+  font-size: 13px; color: var(--text-light-muted);
+  margin-top: 16px; line-height: 1.6; font-style: italic;
+}
+.capeff-chart {
+  background: var(--dark-elevated); border: 1px solid var(--rule-dark);
+  border-radius: 16px; padding: 36px; overflow: hidden;
+}
+.capeff-chart-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-light-muted); margin-bottom: 24px;
+}
+.capeff-chart svg { width: 100%; height: auto; }
+.capeff-chart-footer {
+  display: flex; justify-content: space-between;
+  margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid var(--rule-dark);
+}
+.capeff-chart-footer span {
+  font-family: var(--mono); font-size: 11px; color: var(--text-light-muted);
+}
+.capeff-chart-footer span span { color: var(--text-light-secondary); }
 
 /* ═══════════════════════════════════════════
    CTA
@@ -772,6 +904,7 @@ footer {
   .how-grid { grid-template-columns: 1fr; }
   .thesis-grid { grid-template-columns: 1fr; }
   .thesis-image-card { grid-row: auto; min-height: 280px; }
+  .capeff-grid { grid-template-columns: 1fr; }
   .own-grid { grid-template-columns: 1fr; }
   .sec-grid { grid-template-columns: 1fr; }
   .footer-top { grid-template-columns: 1fr 1fr; }
@@ -937,13 +1070,32 @@ footer {
   </section>
 
   <!-- OWNERSHIP -->
-  <section class="s-card s-card-cream reveal" id="ownership">
+  <section class="s-card s-card-own reveal" id="ownership">
     <div class="s-inner">
+      <div class="own-banner">
+        <i class="ph-duotone ph-question"></i>
+        <span><strong>&lsquo;Pro-rata&rsquo;</strong> refers to your piece of the pie, sized exactly to how much you put in</span>
+      </div>
       <div class="own-grid">
+        <div>
+          <div class="s-tag s-tag-green">Ownership</div>
+          <h2 class="s-headline" style="color:#EEE8DF;"><em class="green">Real Ownership</em><br>of Your Investment</h2>
+          <p class="own-left-body">Every dollar you deposit goes into a vault and is used to buy real positions across real exchanges. You own what you see.</p>
+          <div class="own-features">
+            <div class="own-feature">
+              <div class="own-feature-icon"><i class="ph-duotone ph-eye"></i></div>
+              <div><div class="own-feature-title">Full transparency, as always</div><p class="own-feature-body">See your exact pro-rata slice of every position. No fund vagueness &mdash; you always know exactly what your money is doing.</p></div>
+            </div>
+            <div class="own-feature">
+              <div class="own-feature-icon"><i class="ph-duotone ph-globe-hemisphere-west"></i></div>
+              <div><div class="own-feature-title">Access 28+ global exchanges</div><p class="own-feature-body">Pooled capital means the vault holds positions on Japanese, Taiwanese, and European exchanges you generally can&rsquo;t access as an individual.</p></div>
+            </div>
+          </div>
+        </div>
         <div class="own-card">
           <div class="own-card-header">
-            <span class="own-card-title">Your portfolio breakdown</span>
-            <span class="own-card-badge">Live &middot; Citrini</span>
+            <span class="own-card-title">Your Portfolio Breakdown</span>
+            <span class="own-card-badge">Example Basket</span>
           </div>
           <div class="own-amount">
             <span class="own-amount-val">$100</span>
@@ -957,25 +1109,13 @@ footer {
             <div class="hold-row"><span class="hold-ticker">NET</span><div class="hold-bar"><div class="hold-bar-fill" style="width:36%"></div></div><span class="hold-amt">$3.60</span></div>
           </div>
           <div class="hold-more">+ 137 more positions in your basket</div>
-        </div>
-        <div>
-          <div class="s-tag s-tag-green">Ownership</div>
-          <h2 class="s-headline" style="margin-bottom:16px;">Your $100 isn't a<br>fund unit. <em class="green">It's actually yours.</em></h2>
-          <p style="font-size:15px;font-weight:400;line-height:1.75;color:var(--text-dark-secondary);margin-bottom:32px;">Every dollar you deposit buys real positions across real exchanges. You own what you see.</p>
-          <ul class="own-points">
-            <li class="own-point">
-              <div class="own-point-icon"><i class="ph-duotone ph-eye"></i></div>
-              <div><div class="own-point-title">Full transparency, always</div><p class="own-point-body">See your exact pro-rata slice of every position. No fund vagueness &mdash; you know exactly what your money is doing.</p></div>
-            </li>
-            <li class="own-point">
-              <div class="own-point-icon"><i class="ph-duotone ph-arrows-clockwise"></i></div>
-              <div><div class="own-point-title">Auto-rebalancing included</div><p class="own-point-body">When the manager updates their portfolio, our engine automatically adjusts yours. You never need to log in to trade.</p></div>
-            </li>
-            <li class="own-point">
-              <div class="own-point-icon"><i class="ph-duotone ph-globe-hemisphere-west"></i></div>
-              <div><div class="own-point-title">Access 28+ global exchanges</div><p class="own-point-body">Pooled capital means the vault holds positions on Japanese, Taiwanese, and European exchanges you&rsquo;d never access alone.</p></div>
-            </li>
-          </ul>
+          <div class="own-coverage">
+            <div class="own-coverage-header">
+              <span class="own-coverage-label">Position Coverage</span>
+              <span class="own-coverage-pct">0.2% Filled</span>
+            </div>
+            <div class="own-coverage-grid" id="cov-grid"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1042,6 +1182,58 @@ footer {
           <tr><td>Time required / week</td><td><span class="cmp-check">0 min</span></td><td><span class="cmp-cross">10+ hrs</span></td><td><span class="cmp-check">0 min</span></td></tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- CAPITAL EFFICIENCY -->
+  <section class="s-card s-card-dark reveal" id="capital-efficiency">
+    <div class="s-inner">
+      <div class="capeff-grid">
+        <div>
+          <div class="capeff-tag">Capital Efficiency</div>
+          <h2 class="s-headline" style="color:var(--text-light);">Accuracy improves<br>with <em class="light">scale.</em></h2>
+          <p class="capeff-body">The core value proposition: as more capital enters a basket, tracking error decreases and portfolio coverage improves. This chart illustrates how replication accuracy scales with pooled capital across the Citrindex 142-position portfolio.</p>
+          <p class="capeff-fine">Based on internal capital efficiency modelling. The binding constraints are Japanese lot sizes (100-share minimums on TSE) which require larger pools to fill precisely.</p>
+        </div>
+        <div class="capeff-chart">
+          <div class="capeff-chart-label">Tracking Error vs. Pooled Capital &mdash; Citrindex Portfolio (Illustrative)</div>
+          <svg viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="te-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(160,212,139,0.2)"/>
+                <stop offset="100%" stop-color="rgba(160,212,139,0)"/>
+              </linearGradient>
+            </defs>
+            <line x1="50" y1="10" x2="50" y2="170" stroke="rgba(240,236,228,0.12)" stroke-width="1"/>
+            <line x1="50" y1="170" x2="490" y2="170" stroke="rgba(240,236,228,0.12)" stroke-width="1"/>
+            <text x="45" y="22" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">15%</text>
+            <text x="45" y="62" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">10%</text>
+            <text x="45" y="102" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">5%</text>
+            <text x="45" y="142" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">1%</text>
+            <text x="45" y="172" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">0%</text>
+            <text x="80" y="188" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">$1K</text>
+            <text x="160" y="188" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">$10K</text>
+            <text x="260" y="188" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">$50K</text>
+            <text x="360" y="188" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">$200K</text>
+            <text x="460" y="188" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(240,236,228,0.3)">$1M+</text>
+            <line x1="50" y1="60" x2="490" y2="60" stroke="rgba(240,236,228,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+            <line x1="50" y1="100" x2="490" y2="100" stroke="rgba(240,236,228,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+            <line x1="50" y1="140" x2="490" y2="140" stroke="rgba(240,236,228,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+            <path d="M80,25 C120,45 140,75 180,105 C220,128 280,145 340,155 C400,161 440,164 490,166" fill="none" stroke="#A0D48B" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M80,25 C120,45 140,75 180,105 C220,128 280,145 340,155 C400,161 440,164 490,166 L490,170 L80,170 Z" fill="url(#te-fill)"/>
+            <circle cx="80" cy="25" r="4" fill="#A0D48B"/>
+            <circle cx="160" cy="85" r="4" fill="#A0D48B"/>
+            <circle cx="260" cy="135" r="4" fill="#A0D48B"/>
+            <circle cx="360" cy="155" r="4" fill="#A0D48B"/>
+            <circle cx="460" cy="165" r="4" fill="#A0D48B"/>
+            <line x1="50" y1="148" x2="490" y2="148" stroke="rgba(160,212,139,0.3)" stroke-width="1" stroke-dasharray="6,4"/>
+            <text x="492" y="146" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(160,212,139,0.5)">target</text>
+          </svg>
+          <div class="capeff-chart-footer">
+            <span>Binding constraint: <span>Japanese lot sizes (TSE 100-share min)</span></span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1263,9 +1455,23 @@ footer {
   window.addEventListener('resize', build);
 })();
 
+/* ─── Coverage grid (Ownership section) ─── */
+(function() {
+  const grid = document.getElementById('cov-grid');
+  if (!grid) return;
+  const total = 60;
+  const filled = 56;
+  const partial = 2;
+  for (let i = 0; i < total; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'own-cov-cell' + (i < filled ? ' filled' : i < filled + partial ? ' partial' : '');
+    grid.appendChild(cell);
+  }
+})();
+
 /* ─── Cursor-following gradient on sections with ::before gradient ─── */
 (function() {
-  ['how', 'thesis'].forEach(id => {
+  ['how', 'thesis', 'ownership'].forEach(id => {
     const section = document.getElementById(id);
     if (!section) return;
     section.addEventListener('mousemove', e => {
