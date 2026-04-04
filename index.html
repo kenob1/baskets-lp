@@ -1216,186 +1216,220 @@ a { color: inherit; text-decoration: none; }
 
 /* ─── SECURITY ─── */
 .security-section {
-  border-top: 1px solid var(--rule);
+  background: #384029;
+  border-top: none;
 }
 
-.security-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 100px;
-  align-items: center;
+.security-section.section-pad {
+  padding: 0;
+  max-width: none;
 }
 
-.security-pillars {
+.security-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 120px clamp(24px, 4vw, 60px);
+}
+
+.security-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.security-header .section-tag {
+  justify-content: center;
+}
+
+.security-header .section-tag::before { display: none; }
+
+.security-header .section-headline em {
+  color: #d4b896;
+}
+
+.security-sub {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.75;
+  color: rgba(240,236,228,0.55);
+  margin-top: 20px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.security-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 40px;
+  grid-template-columns: 1fr 1fr 1.15fr;
+  grid-auto-rows: 1fr;
+  gap: 20px;
 }
 
 .security-pillar {
-  background: var(--bg-card);
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  padding: 24px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 28px;
   transition: border-color .3s;
 }
 
-.security-pillar:hover { border-color: rgba(160,212,139,0.25); }
+.security-pillar:hover { border-color: rgba(255,255,255,0.18); }
 
-.pillar-icon {
-  font-size: 24px;
-  color: var(--gold);
-  margin-bottom: 16px;
-  display: block;
+.pillar-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: rgba(240,236,228,0.6);
+  font-size: 20px;
 }
 
 .pillar-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .pillar-body {
   font-size: 13px;
   font-weight: 300;
   line-height: 1.65;
-  color: var(--text-secondary);
+  color: rgba(240,236,228,0.5);
 }
 
-.sec-demo {
-  background: var(--bg-card);
-  border: 1px solid var(--rule);
-  border-radius: 16px;
-  padding: 36px;
-  position: relative;
-  overflow: hidden;
+.sec-demo-light {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
 }
 
-.sec-demo::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
-}
-
-.sec-demo-label {
+.sec-demo-light .sec-demo-label {
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 24px;
+  color: rgba(240,236,228,0.45);
+  margin-bottom: 16px;
+  text-align: center;
 }
 
-.sec-withdrawal {
-  background: var(--bg-elevated);
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
+.sec-demo-light-card {
+  flex: 1;
+  background: #f5f0e8;
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
 }
 
-.sec-w-top {
+.sec-wl-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
 
-.sec-w-amount {
+.sec-wl-amount {
   font-family: var(--serif);
-  font-size: 32px;
-  color: var(--text);
+  font-size: 30px;
+  color: #1a1714;
 }
 
-.sec-w-status {
+.sec-wl-status {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: var(--green);
+  color: #3d8b5e;
 }
 
-.sec-w-dot {
+.sec-wl-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--green);
+  background: #3d8b5e;
   animation: pulse 2s infinite;
 }
 
-.sec-w-sub {
+.sec-wl-sub {
   font-size: 12px;
-  color: var(--text-muted);
+  color: #9c9488;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(26,23,20,0.1);
 }
 
-.sec-timeline {
+.sec-tl-light {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  flex: 1;
 }
 
-.sec-tl-item {
+.sec-tl-light .sec-tl-item {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.sec-tl-dot {
+.sec-tl-light .sec-tl-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.tl-done { background: var(--green); }
-.tl-active { background: var(--gold); }
-.tl-pending { background: var(--rule); }
+.sec-tl-light .tl-done { background: #3d8b5e; }
+.sec-tl-light .tl-active { background: #5a8a4a; }
+.sec-tl-light .tl-pending { background: rgba(26,23,20,0.12); }
 
-.sec-tl-text {
+.sec-tl-light .sec-tl-text {
   font-size: 13px;
-  color: var(--text-secondary);
+  color: #4a4540;
   flex: 1;
 }
 
-.sec-tl-time {
+.sec-tl-light .sec-tl-time {
   font-family: var(--mono);
   font-size: 11px;
-  color: var(--text-muted);
+  color: #9c9488;
 }
 
-.sec-settlement {
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid var(--rule);
+.sec-settle-light {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(26,23,20,0.1);
 }
 
-.sec-settlement-label {
+.sec-settle-light-label {
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 8px;
+  color: #9c9488;
+  margin-bottom: 6px;
 }
 
-.sec-settlement-value {
+.sec-settle-light-value {
   font-family: var(--serif);
-  font-size: 28px;
-  color: var(--gold);
+  font-size: 24px;
+  color: #3d8b5e;
 }
 
-.sec-settlement-note {
+.sec-settle-light-note {
   font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 6px;
+  color: #9c9488;
+  margin-top: 4px;
 }
 
 /* ─── COMPARISON ─── */
@@ -1675,7 +1709,8 @@ footer {
   .how-step:last-child { border-bottom: none; }
   .ownership-grid { grid-template-columns: 1fr; gap: 60px; }
   .testimonials-grid { grid-template-columns: 1fr; }
-  .security-grid { grid-template-columns: 1fr; gap: 60px; }
+  .security-layout { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sec-demo-light { grid-column: 1 / 3; grid-row: auto; }
   .stats-band { grid-template-columns: repeat(3, 1fr); }
   .footer-top { grid-template-columns: 1fr 1fr; }
 }
@@ -1686,7 +1721,8 @@ footer {
   .basket-tab { border-right: none; border-bottom: 1px solid var(--rule); }
   .basket-tab:last-child { border-bottom: none; }
   .basket-meta-grid { grid-template-columns: 1fr; }
-  .security-pillars { grid-template-columns: 1fr; }
+  .security-layout { grid-template-columns: 1fr; }
+  .sec-demo-light { grid-column: 1; }
   .stats-band { grid-template-columns: 1fr 1fr; }
   .stat-item { border-right: none; border-bottom: 1px solid var(--rule); }
   .compare-thead, .compare-row { grid-template-columns: 1.5fr 1fr 1fr 1fr; }
@@ -2142,37 +2178,53 @@ footer {
 
 <!-- SECURITY -->
 <section class="security-section section-pad reveal" id="security">
-  <div class="security-grid">
-    <div>
+  <div class="security-inner">
+    <div class="security-header">
       <div class="section-tag">Security &amp; Trust</div>
-      <h2 class="section-headline">Your money is safe.<br><em>Full stop.</em></h2>
-      <p style="font-size:16px;font-weight:300;line-height:1.75;color:var(--text-secondary);margin-top:20px;max-width:460px;">Built on the same regulated, institutional-grade infrastructure used by professional asset managers.</p>
-      <div class="security-pillars">
-        <div class="security-pillar"><span class="pillar-icon">&#9878;</span><div class="pillar-title">US-Regulated Custody</div><p class="pillar-body">Assets held by SIPC-insured institutional brokers under full regulatory oversight.</p></div>
-        <div class="security-pillar"><span class="pillar-icon">&#9201;</span><div class="pillar-title">48-Hour Withdrawals</div><p class="pillar-body">No lock-ups. Request funds any time &mdash; they settle within a standard 48-hour window.</p></div>
-        <div class="security-pillar"><span class="pillar-icon">&#9670;</span><div class="pillar-title">On-Chain Verification</div><p class="pillar-body">Every position and NAV change recorded on the blockchain. Verify independently, 24/7.</p></div>
-        <div class="security-pillar"><span class="pillar-icon">&#9745;</span><div class="pillar-title">No Black Boxes</div><p class="pillar-body">You always know exactly what you hold. No pooled-fund opacity, no hidden rebalances.</p></div>
-      </div>
+      <h2 class="section-headline">Your Money is<br><em>Safe &amp; Secure, Always</em></h2>
+      <p class="security-sub">Built on regulated, institutional-grade infrastructure used by professional asset managers.</p>
     </div>
-    <div class="sec-demo">
-      <div class="sec-demo-label">Withdrawal Request &middot; Live Simulation</div>
-      <div class="sec-withdrawal">
-        <div class="sec-w-top">
-          <span class="sec-w-amount">$1,284.50</span>
-          <span class="sec-w-status"><span class="sec-w-dot"></span> Processing</span>
+    <div class="security-layout">
+      <div class="security-pillar">
+        <div class="pillar-icon-box"><i class="ph-light ph-shield-check" aria-hidden="true"></i></div>
+        <div class="pillar-title">US-Regulated Custody</div>
+        <p class="pillar-body">Assets held by SIPC-insured brokers under full regulatory oversight.</p>
+      </div>
+      <div class="security-pillar">
+        <div class="pillar-icon-box"><i class="ph-light ph-clock-countdown" aria-hidden="true"></i></div>
+        <div class="pillar-title">48-Hour Withdrawals</div>
+        <p class="pillar-body">No lock-ups. Request funds any time &mdash; they settle within a standard 48-hour window.</p>
+      </div>
+      <div class="sec-demo-light">
+        <div class="sec-demo-label">Example Withdrawal Request</div>
+        <div class="sec-demo-light-card">
+          <div class="sec-wl-top">
+            <span class="sec-wl-amount">$1,284.50</span>
+            <span class="sec-wl-status"><span class="sec-wl-dot"></span> Processing</span>
+          </div>
+          <div class="sec-wl-sub">Full balance &middot; Citrini Basket &middot; All positions</div>
+          <div class="sec-tl-light">
+            <div class="sec-tl-item"><div class="sec-tl-dot tl-done"></div><span class="sec-tl-text">Withdrawal request submitted</span><span class="sec-tl-time">Just now</span></div>
+            <div class="sec-tl-item"><div class="sec-tl-dot tl-done"></div><span class="sec-tl-text">Positions flagged for liquidation</span><span class="sec-tl-time">Instant</span></div>
+            <div class="sec-tl-item"><div class="sec-tl-dot tl-active"></div><span class="sec-tl-text">Trades executing on IBKR</span><span class="sec-tl-time">T+0</span></div>
+            <div class="sec-tl-item"><div class="sec-tl-dot tl-pending"></div><span class="sec-tl-text">USDC sent to your wallet</span><span class="sec-tl-time">T+2</span></div>
+          </div>
+          <div class="sec-settle-light">
+            <div class="sec-settle-light-label">Estimated Settlement</div>
+            <div class="sec-settle-light-value">Within 48 hours</div>
+            <div class="sec-settle-light-note">No early exit fees &middot; No lock-up penalties</div>
+          </div>
         </div>
-        <div class="sec-w-sub">Full balance &middot; Citrini Basket &middot; All positions</div>
       </div>
-      <div class="sec-timeline">
-        <div class="sec-tl-item"><div class="sec-tl-dot tl-done"></div><span class="sec-tl-text">Withdrawal request submitted</span><span class="sec-tl-time">Just now</span></div>
-        <div class="sec-tl-item"><div class="sec-tl-dot tl-done"></div><span class="sec-tl-text">Positions flagged for liquidation</span><span class="sec-tl-time">Instant</span></div>
-        <div class="sec-tl-item"><div class="sec-tl-dot tl-active"></div><span class="sec-tl-text">Trades executing on IBKR</span><span class="sec-tl-time">T+0</span></div>
-        <div class="sec-tl-item"><div class="sec-tl-dot tl-pending"></div><span class="sec-tl-text">USDC sent to your wallet</span><span class="sec-tl-time">T+2</span></div>
+      <div class="security-pillar">
+        <div class="pillar-icon-box"><i class="ph-light ph-vault" aria-hidden="true"></i></div>
+        <div class="pillar-title">Segregated Accounts</div>
+        <p class="pillar-body">Your assets are held separately, never commingled with company funds or other investors.</p>
       </div>
-      <div class="sec-settlement">
-        <div class="sec-settlement-label">Estimated Settlement</div>
-        <div class="sec-settlement-value">Within 48 hours</div>
-        <div class="sec-settlement-note">No early exit fees &middot; No lock-up penalties</div>
+      <div class="security-pillar">
+        <div class="pillar-icon-box"><i class="ph-light ph-eye" aria-hidden="true"></i></div>
+        <div class="pillar-title">No Black Boxes</div>
+        <p class="pillar-body">You always know exactly what you hold. No pooled-fund opacity, no hidden rebalances.</p>
       </div>
     </div>
   </div>
