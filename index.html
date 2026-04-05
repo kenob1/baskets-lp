@@ -76,7 +76,7 @@
   --section-px: clamp(28px, 5vw, 64px);
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   background: var(--cream);
@@ -276,6 +276,7 @@ a { color: inherit; text-decoration: none; }
 .content-shell {
   position: relative; z-index: 2;
   padding: clamp(12px, 1.5vw, 20px) clamp(20px, 3vw, 48px) 0;
+  max-width: 100%; overflow-x: hidden;
 }
 
 /* ═══════════════════════════════════════════
@@ -1236,10 +1237,12 @@ footer {
 
 @media (max-width: 768px) {
   :root {
-    --shell-radius: 20px;
-    --card-radius: 18px;
-    --card-gap: 12px;
+    --shell-radius: 16px;
+    --card-radius: 16px;
+    --card-gap: 10px;
   }
+
+  .content-shell { padding: 8px 10px 0; }
 
   /* Nav */
   .nav { padding: 16px 20px; }
@@ -1247,14 +1250,14 @@ footer {
   .nav-brand .brand-emblem { height: 30px; }
   .nav-cta { padding: 8px 16px; font-size: 12px; }
   .nav.scrolled { padding-top: 12px; padding-bottom: 12px; }
-  .nav.scrolled::before { left: 16px; }
-  .nav.scrolled::after { right: 16px; }
+  .nav.scrolled::before { left: 10px; }
+  .nav.scrolled::after { right: 10px; }
 
   /* Hero */
   .hero { min-height: 85vh; }
-  .hero-content { margin-top: 20px; }
+  .hero-content { margin-top: 20px; padding: 0 24px; }
   .hero-headline { font-size: clamp(36px, 10vw, 52px); margin-bottom: 18px; }
-  .hero-sub { font-size: 13px; margin-bottom: 28px; }
+  .hero-sub { font-size: 13px; margin-bottom: 28px; max-width: 100%; }
   .hero-scroll { bottom: 24px; }
 
   /* Section cards — tighter padding */
@@ -1336,6 +1339,15 @@ footer {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --card-radius: 14px;
+    --card-gap: 8px;
+  }
+
+  .content-shell { padding: 6px 8px 0; }
+  .nav.scrolled::before { left: 8px; }
+  .nav.scrolled::after { right: 8px; }
+
   #intro-emblem { top: 32px; }
   #intro-emblem svg { width: 36px; height: 36px; }
   #intro-ticker { top: 100px; }
@@ -1344,8 +1356,10 @@ footer {
   #intro-wordmark svg { width: 70vw; }
   #intro-cta { padding: 11px 28px; font-size: 13px; }
 
+  .hero-content { padding: 0 20px; }
   .hero-headline { font-size: clamp(32px, 9vw, 42px); }
-  .s-card { padding: 40px 18px; }
+  .hero-sub { font-size: 12px; }
+  .s-card { padding: 40px 16px; }
   .s-headline { font-size: clamp(24px, 7vw, 32px); }
 
   .how-item { padding: 22px 18px; }
@@ -2456,7 +2470,7 @@ footer {
     '#e0d5c8','#e8e0d4','#e4dcd0'
   ];
 
-  var count = isMobile ? 28 : 30;
+  var count = isMobile ? 16 : 30;
   var shuffled = STOCKS.slice(0, count).sort(function() { return Math.random() - 0.5; });
 
   var Engine = Matter.Engine, Bodies = Matter.Bodies,
@@ -2479,20 +2493,22 @@ footer {
   var svgTop = wmRect.top;
   var scl = svgW / 289;
 
-  var letterDefs = [
-    [0, 31.7], [41.7, 36.7], [87.9, 31], [132.7, 34.5],
-    [178.9, 27.3], [217.1, 31.4], [257.6, 31]
-  ];
-  var letterOpts = { isStatic: true, restitution: 0.5, friction: 0.1 };
-  letterDefs.forEach(function(ld) {
-    var cx = svgLeft + (ld[0] + ld[1] / 2) * scl;
-    var cy = svgTop + 21.5 * scl;
-    var bw = ld[1] * scl;
-    var bh = 43 * scl;
-    var rect = Bodies.rectangle(cx, cy, bw, bh, letterOpts);
-    Composite.add(engine.world, rect);
-    letterBodies.push(rect);
-  });
+  if (!isMobile) {
+    var letterDefs = [
+      [0, 31.7], [41.7, 36.7], [87.9, 31], [132.7, 34.5],
+      [178.9, 27.3], [217.1, 31.4], [257.6, 31]
+    ];
+    var letterOpts = { isStatic: true, restitution: 0.5, friction: 0.1 };
+    letterDefs.forEach(function(ld) {
+      var cx = svgLeft + (ld[0] + ld[1] / 2) * scl;
+      var cy = svgTop + 21.5 * scl;
+      var bw = ld[1] * scl;
+      var bh = 43 * scl;
+      var rect = Bodies.rectangle(cx, cy, bw, bh, letterOpts);
+      Composite.add(engine.world, rect);
+      letterBodies.push(rect);
+    });
+  }
 
   function hexToRgba(hex, a) {
     var n = parseInt(hex.replace('#',''), 16);
