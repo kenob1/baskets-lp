@@ -5,5 +5,12 @@
   "description": "Baskets landing page",
   "dependencies": {
     "@phosphor-icons/web": "2.1.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.80.0"
+  },
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   }
 }
