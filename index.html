@@ -100,7 +100,7 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid transparent;
 }
 .top-wordmark {
-  display: flex; justify-content: center; padding: 20px 0 0;
+  display: flex; justify-content: center; padding: 20px 0 12px;
   transition: opacity .4s;
   cursor: pointer;
 }
@@ -1113,7 +1113,6 @@ footer {
   position: absolute; top: 148px; left: 0;
   z-index: 60; width: 100%;
   overflow-x: auto; overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
   pointer-events: auto;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%);
@@ -1243,6 +1242,14 @@ footer {
   }
 
   .content-shell { padding: 8px 10px 0; }
+
+  /* Reduce noise/grain on mobile */
+  .s-card-lavender::after,
+  .s-card-thesis::after,
+  .s-card-own::after,
+  .s-card-security::after,
+  .thesis-info-card::before,
+  #intro::after { opacity: 0.12; }
 
   /* Nav */
   .nav { padding: 16px 20px; }
@@ -2326,6 +2333,10 @@ footer {
     }, { passive: true });
 
     introTicker.addEventListener('touchstart', tickerPauseStart, { passive: true });
+    introTicker.addEventListener('touchend', function() {
+      tickerSnapToNearest();
+      tickerResumeAfterSnap();
+    }, { passive: true });
 
     var tdrag = { active: false, startX: 0, sl: 0 };
 
