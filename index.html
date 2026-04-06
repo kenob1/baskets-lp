@@ -1112,17 +1112,15 @@ footer {
 #intro-ticker {
   position: absolute; top: 148px; left: 0;
   z-index: 60; width: 100%;
-  overflow-x: auto; overflow-y: hidden;
+  overflow: hidden;
   pointer-events: auto;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%);
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
-#intro-ticker::-webkit-scrollbar { display: none; }
 .intro-ticker-track {
   display: flex; gap: 48px; align-items: flex-start;
   padding: 0 calc(50vw - 210px);
+  will-change: transform;
 }
 .intro-quote {
   font-family: var(--serif); font-style: italic;
@@ -2272,87 +2270,100 @@ footer {
     var tickerPaused = false;
     var tickerResumeTimer = null;
     var tickerTrack = introTicker.querySelector('.intro-ticker-track');
-    var tickerMaxScroll = 0;
+    var tickerX = 0;
+    var tickerTrackWidth = 0;
     var tickerHalf = 0;
+    var tickerQuotes = introTicker.querySelectorAll('.intro-quote');
+    var tickerSnapping = false;
 
     function tickerMeasure() {
       if (!tickerTrack) return;
-      tickerMaxScroll = introTicker.scrollWidth - introTicker.clientWidth;
-      tickerHalf = Math.floor(tickerMaxScroll / 2);
+      tickerTrackWidth = tickerTrack.scrollWidth;
+      tickerHalf = Math.floor((tickerTrackWidth - introTicker.clientWidth) / 2);
+    }
+
+    function tickerApply() {
+      tickerTrack.style.transform = 'translateX(' + (-tickerX) + 'px)';
     }
 
     function tickerLoop() {
       if (cleaned) return;
-      if (!tickerPaused && tickerMaxScroll > 0) {
-        introTicker.scrollLeft += tickerSpeed;
-        if (introTicker.scrollLeft >= tickerHalf) {
-          introTicker.scrollLeft = 1;
-        }
+      if (!tickerPaused && !tickerSnapping && tickerHalf > 0) {
+        tickerX += tickerSpeed;
+        if (tickerX >= tickerHalf) tickerX = 1;
+        tickerApply();
       }
       requestAnimationFrame(tickerLoop);
     }
 
-    var tickerQuotes = introTicker.querySelectorAll('.intro-quote');
-
-    function tickerPauseStart() {
-      tickerPaused = true;
-    }
-
     function tickerSnapToNearest() {
-      var center = introTicker.scrollLeft + introTicker.clientWidth / 2;
+      var viewCenter = tickerX + introTicker.clientWidth / 2;
       var best = 0, bestDist = Infinity;
       for (var i = 0; i < tickerQuotes.length; i++) {
         var q = tickerQuotes[i];
         var qCenter = q.offsetLeft + q.offsetWidth / 2;
-        var d = Math.abs(qCenter - center);
+        var d = Math.abs(qCenter - viewCenter);
         if (d < bestDist) { bestDist = d; best = i; }
       }
       var target = tickerQuotes[best].offsetLeft + tickerQuotes[best].offsetWidth / 2 - introTicker.clientWidth / 2;
-      introTicker.scrollTo({ left: target, behavior: 'smooth' });
+      target = Math.max(0, Math.min(target, tickerTrackWidth - introTicker.clientWidth));
+      tickerSnapping = true;
+      tickerTrack.style.transition = 'transform 0.35s ease-out';
+      tickerX = target;
+      tickerApply();
+      setTimeout(function() {
+        tickerTrack.style.transition = 'none';
+        tickerSnapping = false;
+      }, 370);
     }
-
-    var scrollIdleTimer = null;
 
     function tickerResumeAfterSnap() {
       if (tickerResumeTimer) clearTimeout(tickerResumeTimer);
       tickerResumeTimer = setTimeout(function() {
         tickerPaused = false;
-      }, 800);
+      }, 1200);
     }
 
-    function tickerOnScrollIdle() {
-      if (scrollIdleTimer) clearTimeout(scrollIdleTimer);
-      scrollIdleTimer = setTimeout(function() {
-        tickerSnapToNearest();
-        tickerResumeAfterSnap();
-      }, 150);
-    }
+    var touchStartX = 0, touchStartTickerX = 0;
 
-    introTicker.addEventListener('scroll', function() {
-      if (tickerPaused) tickerOnScrollIdle();
+    introTicker.addEventListener('touchstart', function(e) {
+      tickerPaused = true;
+      tickerTrack.style.transition = 'none';
+      tickerSnapping = false;
+      touchStartX = e.touches[0].clientX;
+      touchStartTickerX = tickerX;
     }, { passive: true });
 
-    introTicker.addEventListener('touchstart', tickerPauseStart, { passive: true });
+    introTicker.addEventListener('touchmove', function(e) {
+      var dx = touchStartX - e.touches[0].clientX;
+      tickerX = Math.max(0, touchStartTickerX + dx);
+      tickerApply();
+    }, { passive: true });
+
     introTicker.addEventListener('touchend', function() {
       tickerSnapToNearest();
       tickerResumeAfterSnap();
     }, { passive: true });
 
-    var tdrag = { active: false, startX: 0, sl: 0 };
+    var tdrag = { active: false, startX: 0, startTickerX: 0 };
 
     introTicker.addEventListener('mousedown', function(e) {
       e.preventDefault();
       e.stopPropagation();
       tdrag.active = true;
       tdrag.startX = e.pageX;
-      tdrag.sl = introTicker.scrollLeft;
+      tdrag.startTickerX = tickerX;
+      tickerTrack.style.transition = 'none';
+      tickerSnapping = false;
       introTicker.style.cursor = 'grabbing';
-      tickerPauseStart();
+      tickerPaused = true;
     });
     document.addEventListener('mousemove', function(e) {
       if (!tdrag.active) return;
       e.preventDefault();
-      introTicker.scrollLeft = tdrag.sl - (e.pageX - tdrag.startX);
+      var dx = tdrag.startX - e.pageX;
+      tickerX = Math.max(0, tdrag.startTickerX + dx);
+      tickerApply();
     });
     document.addEventListener('mouseup', function() {
       if (!tdrag.active) return;
@@ -2368,7 +2379,12 @@ footer {
 
     introTicker.addEventListener('wheel', function(e) {
       e.stopPropagation();
-      tickerPauseStart();
+      tickerPaused = true;
+      tickerTrack.style.transition = 'none';
+      tickerSnapping = false;
+      tickerX = Math.max(0, tickerX + e.deltaX);
+      tickerApply();
+      tickerResumeAfterSnap();
     }, { passive: true });
 
     introTicker.style.cursor = 'grab';
@@ -2376,7 +2392,7 @@ footer {
     setTimeout(function() {
       tickerMeasure();
       requestAnimationFrame(tickerLoop);
-    }, 200);
+    }, 300);
   }
 
   if (window.scrollY >= H) { cleanup(); return; }
