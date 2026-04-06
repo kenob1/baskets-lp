@@ -2197,6 +2197,14 @@ footer {
     }
     if (circlesEl) circlesEl.innerHTML = '';
 
+    var shell = document.querySelector('.content-shell');
+    if (shell) {
+      shell.style.position = 'fixed';
+      shell.style.top = '0';
+      shell.style.left = '0';
+      shell.style.right = '0';
+    }
+
     if (spacer) {
       spacer.style.height = '0';
       spacer.style.overflow = 'hidden';
@@ -2206,6 +2214,12 @@ footer {
     document.documentElement.style.scrollBehavior = '';
 
     requestAnimationFrame(function() {
+      if (shell) {
+        shell.style.position = '';
+        shell.style.top = '';
+        shell.style.left = '';
+        shell.style.right = '';
+      }
       intro.style.display = 'none';
 
       if (navEl) {
