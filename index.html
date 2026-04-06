@@ -2201,7 +2201,9 @@ footer {
       spacer.style.height = '0';
       spacer.style.overflow = 'hidden';
     }
+    document.documentElement.style.scrollBehavior = 'auto';
     window.scrollTo(0, 0);
+    document.documentElement.style.scrollBehavior = '';
 
     requestAnimationFrame(function() {
       intro.style.display = 'none';
@@ -2391,6 +2393,12 @@ footer {
 
     setTimeout(function() {
       tickerMeasure();
+      if (tickerQuotes.length > 2) {
+        var q = tickerQuotes[2];
+        tickerX = q.offsetLeft + q.offsetWidth / 2 - introTicker.clientWidth / 2;
+        tickerX = Math.max(0, tickerX);
+        tickerApply();
+      }
       requestAnimationFrame(tickerLoop);
     }, 300);
   }
@@ -2640,16 +2648,6 @@ footer {
     });
   }
 
-  if (isMobile && window.DeviceOrientationEvent) {
-    function handleOrientation(e) {
-      if (cleaned) return;
-      if (e.gamma !== null) engine.gravity.x = (e.gamma / 90) * 2.5;
-      if (e.beta !== null) engine.gravity.y = ((e.beta - 30) / 90) * 2.5;
-    }
-    if (typeof DeviceOrientationEvent.requestPermission !== 'function') {
-      window.addEventListener('deviceorientation', handleOrientation);
-    }
-  }
 
   matterRunning = true;
   function tick() {
